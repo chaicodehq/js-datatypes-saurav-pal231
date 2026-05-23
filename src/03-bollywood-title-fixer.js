@@ -1,4 +1,5 @@
 /**
+ * // RESVISIOOOONNNNNNNNN
  * 🎬 Bollywood Movie Title Fixer
  *
  * Pappu ne ek movie database banaya hai lekin usne saare titles galat type
@@ -31,4 +32,18 @@
  */
 export function fixBollywoodTitle(title) {
   // Your code here
+  if (typeof title !== "string") return "";
+  if (title.trim() === "") return "";
+  const trimmedTitle = title.trim();
+  const exceptions = ["ka", "ki", "ke", "se", "aur", "ya", "the", "of", "in", "a", "an"];
+  const words = trimmedTitle.split(/\s+/);
+  const formattedWords = words.map((word, index) => {
+    const lowerWord = word.toLowerCase();
+    if (index > 0 && exceptions.includes(lowerWord)) {
+      return lowerWord;
+    }
+    return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1);
+  });
+  return formattedWords.join(" ");
+
 }

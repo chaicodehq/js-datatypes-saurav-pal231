@@ -48,4 +48,67 @@
  */
 export function analyzeUPITransactions(transactions) {
   // Your code here
+  if (!Array.isArray(transactions) || transactions.length === 0) return null;
+  const validTransactions = transactions.filter((txn) => {
+    const isAmountValid = typeof txn.amount === "number" && txn.amount > 0;
+    const isTypeValid = txn.type === "credit" || txn.type === "debit";
+    return isAmountValid && isTypeValid;
+  });
+  if (validTransactions.length === 0) return null;
+
+  const totalCredit = validTransactions
+    .filter((txn) => txn.type === "credit")
+    .reduce((sum, txn) => sum + txn.amount, 0);
+
+  const totalDebit = validTransactions
+    .filter((txn) => txn.type === "debit")
+    .reduce((sum, txn) => sum + txn.amount, 0);
+
+  const netBalance = totalCredit - totalDebit;
+
+  const transactionCount = validTransactions.length;
+
+  const sumAll = validTransactions.reduce((sum, txn) => sum + txn.amount, 0);
+
+  const avgTransaction = Math.round(sumAll / transactionCount);
+
+  const highestTransaction = validTransactions.reduce(
+    (highest, current) => (current.amount > highest.amount ? current : highest),
+    validTransactions[0]
+  );
+
+  const categoryBreakdown = {};
+  const contactFrequency = {};
+
+  validTransactions.forEach((txn) => {
+    categoryBreakdown[txn.category] =
+      (categoryBreakdown[txn.category] || 0) + txn.amount;
+    contactFrequency[txn.to] = (contactFrequency[txn.to] || 0) + 1;
+  });
+
+  let frequentContact = "";
+  let maxFrequency = 0;
+
+  validTransactions.forEach((txn) => {
+    if (contactFrequency[txn.to] > maxFrequency) {
+      maxFrequency = contactFrequency[txn.to];
+      frequentContact = txn.to;
+    }
+  });
+
+  const allAbove100 = validTransactions.every((txn) => txn.amount > 100);
+  const hasLargeTransaction = validTransactions.some((txn) => txn.amount >= 5000);
+
+  return {
+    totalCredit,
+    totalDebit,
+    netBalance,
+    transactionCount,
+    avgTransaction,
+    highestTransaction,
+    categoryBreakdown,
+    frequentContact,
+    allAbove100,
+    hasLargeTransaction,
+  };
 }

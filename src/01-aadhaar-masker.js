@@ -1,4 +1,5 @@
 /**
+ * ////RESVISIONNNNNNNNNNNNNNNNNNNNN
  * 🪪 Aadhaar Number Masker
  *
  * Sharma uncle ka beta naya app bana raha hai jisme Aadhaar number dikhana hai,
@@ -29,4 +30,10 @@
  */
 export function maskAadhaar(aadhaarNumber) {
   // Your code here
+  if (typeof aadhaarNumber !== "string" || aadhaarNumber.length !== 12) return "INVALID";
+  if (!/^\d{12}$/.test(aadhaarNumber)) {
+    return "INVALID";
+  }
+  const lastFour = aadhaarNumber.slice(-4);
+  return `XXXX-XXXX-${lastFour}`;
 }

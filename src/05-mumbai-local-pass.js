@@ -1,4 +1,5 @@
 /**
+ * ////REVISIONNNNNNNNNN (MUSTTT)
  * 🚂 Mumbai Local Train Pass Generator
  *
  * Aaj se tu Mumbai local ka digital pass system bana raha hai! Passenger
@@ -43,4 +44,42 @@
  */
 export function generateLocalPass(passenger) {
   // Your code here
+  if (typeof passenger !== "object" || !passenger || Array.isArray(passenger)) return "INVALID PASS";
+  const { name, from, to, classType } = passenger;// DESTRUCTURING (REMEMBER THIS APPLICATION)
+
+  if (
+    typeof name !== "string" || name.trim() === "" ||
+    typeof from !== "string" || from.trim() === "" ||
+    typeof to !== "string" || to.trim() === "" ||
+    typeof classType !== "string" || classType.trim() === ""
+  ) {
+    return "INVALID PASS";
+  }
+
+  const normalizedClass = classType.trim().toLowerCase();
+  if (normalizedClass !== "first" && normalizedClass !== "second") {
+    return "INVALID PASS";
+  }
+  const formattedName = name.trim().toUpperCase();
+  const formattedClass = normalizedClass.toUpperCase();
+
+  const cleanFrom = from.trim();
+  const cleanTo = to.trim();
+
+  const titleFrom = cleanFrom.charAt(0).toUpperCase() + cleanFrom.slice(1).toLowerCase();
+  const titleTo = cleanTo.charAt(0).toUpperCase() + cleanTo.slice(1).toLowerCase();
+
+  const passId = 
+    formattedClass.charAt(0) + 
+    cleanFrom.slice(0, 3).toUpperCase() + 
+    cleanTo.slice(0, 3).toUpperCase();
+
+  // 6. Construct and return the final string using a template literal
+  return `MUMBAI LOCAL PASS
+---
+Name: ${formattedName}
+From: ${titleFrom}
+To: ${titleTo}
+Class: ${formattedClass}
+Pass ID: ${passId}`;
 }

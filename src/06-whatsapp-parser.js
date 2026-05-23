@@ -1,4 +1,5 @@
 /**
+ * // FAT KE HAATH ME AA GYA
  * 💬 WhatsApp Message Parser
  *
  * Chintu ek WhatsApp chat analyzer bana raha hai. Usse raw WhatsApp
@@ -21,7 +22,7 @@
  *     - Agar dono match hote hain, "funny" gets priority
  *   - Hint: Use indexOf(), substring()/slice(), includes(), split(),
  *     trim(), toLowerCase()
- *
+  *
  * Validation:
  *   - Agar input string nahi hai, return null
  *   - Agar string mein " - " nahi hai ya ": " nahi hai (after sender), return null
@@ -40,4 +41,36 @@
  */
 export function parseWhatsAppMessage(message) {
   // Your code here
+  if (typeof message !== "string") return null;
+  const commaIndex = message.indexOf(", ");
+  const dashIndex = message.indexOf(" - ", commaIndex);
+  const colonIndex = message.indexOf(": ", dashIndex);
+
+  if (commaIndex === -1 || dashIndex === -1 || colonIndex === -1) {
+    return null; 
+  }
+
+  const date = message.substring(0, commaIndex).trim();
+  const time = message.substring(commaIndex + 2, dashIndex).trim();
+  const sender = message.substring(dashIndex + 3, colonIndex).trim();
+  const text = message.substring(colonIndex + 2).trim();
+
+  const wordCount = text.split(" ").filter(word => word.trim() !== "").length;
+  const lowerText = text.toLowerCase();
+  let sentiment = "neutral";
+
+  if (lowerText.includes("😂") || lowerText.includes(":)") || lowerText.includes("haha")) {
+    sentiment = "funny";
+  } else if (lowerText.includes("❤") || lowerText.includes("love") || lowerText.includes("pyaar")) {
+    sentiment = "love";
+  }
+
+  return {
+    date,
+    time,
+    sender,
+    text,
+    wordCount,
+    sentiment
+  };
 }
